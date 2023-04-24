@@ -73,6 +73,17 @@ namespace loteriaBack.Controllers
             }
             catch (Exception ex) { return BadRequest(ex.Message); }
         }
-        
+
+        [HttpGet]
+        [Route("GetSemanal/{fechaInicial}/{fechaFinal}")]
+        public async Task<IActionResult> GetSemanal(DateTime fechaInicial,DateTime fechaFinal )
+        {
+            try
+            {              
+                return Ok(fechaInicial);
+            }
+            catch (Exception ex) { return BadRequest(ex.Message); }
+        }
+
     }
 }
