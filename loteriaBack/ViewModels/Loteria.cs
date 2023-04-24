@@ -1,13 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace loteriaBack.Models
+namespace loteriaBack.ViewModels
 {
     public class Loteria
     {
         [Required]
-        public int sorteos { get; set; }
+        public int numeroSorteos { get; set; }
         [Required]
-        public string loteria { get; set; }
+        public string nombreLoteria { get; set; }
         [Required]
         public DateTime fecha { get; set; }
     }
