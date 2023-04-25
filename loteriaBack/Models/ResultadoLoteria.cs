@@ -12,6 +12,8 @@ namespace loteriaBack.Models
         public int CuartaCifra { get; set; }
         public string Pleno { get; set; } = string.Empty;
         public string Ordenado { get; set; } = string.Empty;
+        public string Pleno3Cifras { get; set; } = string.Empty;
+        public string Ordenado3Cifras { get; set; } = string.Empty;
         public bool DosCifras { get; set; }
         public bool TresCifras { get; set; }
         public bool CuatroCifras { get; set; }

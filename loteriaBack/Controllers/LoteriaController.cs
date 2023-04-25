@@ -8,6 +8,8 @@ using System.Globalization;
 
 namespace loteriaBack.Controllers
 {
+
+//método get para generar y devolver los resultados de una unica lotería desde ciera fecha inicial hasta la fecha presente;
     [Route("api/[controller]")]
     [ApiController]
     public class LoteriaController : ControllerBase
@@ -24,6 +26,8 @@ namespace loteriaBack.Controllers
             }
             catch (Exception ex) { return BadRequest(ex.Message); }
         }
+
+//método get para obtener el listado de resultados diarios de todas las loterias Colombianas en rangos de fechas establecidos;
 
         [HttpGet]
         [Route("GetSemanal/{fechaInicial}/{fechaFinal}")]
@@ -84,20 +88,23 @@ namespace loteriaBack.Controllers
             catch (Exception ex) { return BadRequest(ex.Message); }
         }
 
+
+// metodo get para llamar, elaborar y devolver el método de la columna con cuatro y tres cifras de manera plena y ordenada;
+
         [HttpGet]
         [Route("GetMetodoColumna/{pleno}")]
         public async Task<IActionResult> GetMetodoColumna(string pleno)
         {
             try
             {
-                string[] listaNumeros = new string[10];
-                string numero = pleno;
-                for (int i=0; i<9; i++) 
+                List<ResultadoMetodoColumna> resultadosMetodoColumna = new();
+                string numero4 = pleno;
+                for (int i = 0; i < 9; i++)
                 {
-                    char[] digitos = numero.ToCharArray(); // Convertir la cadena a un arreglo de caracteres
+                    ResultadoMetodoColumna resultadoMetodoColumna = new();                    
+                    char[] digitos = numero4.ToCharArray(); // Convertir la cadena a un arreglo de caracteres                   
                     string resultado = ""; // Variable para almacenar el resultado
-
-                    // Recorrer el arreglo de caracteres
+                                           // Recorrer el arreglo de caracteres
                     foreach (char digito in digitos)
                     {
                         int valor = int.Parse(digito.ToString()); // Convertir el carácter a un número entero
@@ -105,17 +112,25 @@ namespace loteriaBack.Controllers
                         if (valor == 10) { valor = 0; }
                         resultado += valor.ToString(); // Agregar el valor al resultado como cadena de texto
                     }
-
-                    numero = resultado;
-                    listaNumeros[i] = numero;
-
+                    numero4 = resultado;
+                    resultadoMetodoColumna.Generado4Cifras = numero4;
+                    char[] chars = resultadoMetodoColumna.Generado4Cifras.ToCharArray(); //separamos nuestro numero string para poderlo manipular
+                    Array.Sort(chars); //organizamos de menor a mayor el numero;
+                    resultadoMetodoColumna.OrdenadoGenerado4Cifras = new string(chars);                    
+                    resultadoMetodoColumna.Generado3Cifras = numero4.Substring(1, 3);
+                    char[] chars3 = resultadoMetodoColumna.Generado3Cifras.ToCharArray(); 
+                    Array.Sort(chars3);
+                    resultadoMetodoColumna.OrdenadoGenerado3Cifras = new string(chars3);
+                    resultadosMetodoColumna.Add(resultadoMetodoColumna);
                 }
-                return Ok(listaNumeros);
+
+                return Ok(resultadosMetodoColumna);
+
             }
             catch (Exception ex) { return BadRequest(ex.Message); }
         }
 
-
+//función para crear el listado de tipo ResultadoLoteria
 
         private static List<ResultadoLoteria> GetSorteosPorLoteria(int numeroSorteos, string nombreLoteria, DateTime fecha)
         {
@@ -129,6 +144,8 @@ namespace loteriaBack.Controllers
             }
             return sorteos;
         }
+
+// función para crear el individual de cada uno de los ResultadoLoteria;
 
         private static ResultadoLoteria GetSorteoPorLoteria(int numeroSorteo, string nombreLoteria, DateTime fecha)
         {
@@ -158,9 +175,13 @@ namespace loteriaBack.Controllers
             }
 
             sorteo.Pleno = $"{sorteo.PrimeraCifra}{sorteo.SegundaCifra}{sorteo.TerceraCifra}{sorteo.CuartaCifra}"; // concatenamos en string los valores obtenidos por individual para tener nuestro numero pleno;
+            sorteo.Pleno3Cifras = $"{sorteo.SegundaCifra}{sorteo.TerceraCifra}{sorteo.CuartaCifra}";
             char[] chars = sorteo.Pleno.ToCharArray(); //separamos nuestro numero string para poderlo manipular
             Array.Sort(chars); //organizamos de menor a mayor el numero;
             sorteo.Ordenado = new string(chars);
+            char[] chars3 = sorteo.Pleno3Cifras.ToCharArray(); //separamos nuestro numero string para poderlo manipular
+            Array.Sort(chars3); //organizamos de menor a mayor el numero;
+            sorteo.Ordenado3Cifras = new string(chars3);
             var grupos = sorteo.Pleno.GroupBy(c => c); // agrupamos por cantidad de numeros iguales 
             foreach (var grupo in grupos)
             {
