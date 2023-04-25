@@ -84,6 +84,39 @@ namespace loteriaBack.Controllers
             catch (Exception ex) { return BadRequest(ex.Message); }
         }
 
+        [HttpGet]
+        [Route("GetMetodoColumna/{pleno}")]
+        public async Task<IActionResult> GetMetodoColumna(string pleno)
+        {
+            try
+            {
+                string[] listaNumeros = new string[10];
+                string numero = pleno;
+                for (int i=0; i<9; i++) 
+                {
+                    char[] digitos = numero.ToCharArray(); // Convertir la cadena a un arreglo de caracteres
+                    string resultado = ""; // Variable para almacenar el resultado
+
+                    // Recorrer el arreglo de caracteres
+                    foreach (char digito in digitos)
+                    {
+                        int valor = int.Parse(digito.ToString()); // Convertir el carácter a un número entero
+                        valor++; // Sumar uno al valor
+                        if (valor == 10) { valor = 0; }
+                        resultado += valor.ToString(); // Agregar el valor al resultado como cadena de texto
+                    }
+
+                    numero = resultado;
+                    listaNumeros[i] = numero;
+
+                }
+                return Ok(listaNumeros);
+            }
+            catch (Exception ex) { return BadRequest(ex.Message); }
+        }
+
+
+
         private static List<ResultadoLoteria> GetSorteosPorLoteria(int numeroSorteos, string nombreLoteria, DateTime fecha)
         {
             if (numeroSorteos == 0) { numeroSorteos = 5; } // para generar numero de sorteos y fechas por defecto en caso de venir vacio esos campos;
