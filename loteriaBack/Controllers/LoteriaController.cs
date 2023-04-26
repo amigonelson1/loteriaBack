@@ -192,6 +192,15 @@ namespace loteriaBack.Controllers
                     if (grupo.Count() == 4) { sorteo.CuatroCifras = true; }
                 }
             }
+            var grupos3 = sorteo.Pleno3Cifras.GroupBy(c => c); // agrupamos por cantidad de numeros iguales 
+            foreach (var grupo in grupos3)
+            {
+                if (grupo.Count() > 1)
+                {
+                    if (grupo.Count() == 2) { sorteo.DosCifras3 = true; }
+                    if (grupo.Count() == 3) { sorteo.TresCifras3 = true; }
+                }
+            }
             return sorteo;
         }
 

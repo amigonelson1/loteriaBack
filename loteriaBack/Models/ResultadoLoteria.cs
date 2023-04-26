@@ -16,6 +16,8 @@ namespace loteriaBack.Models
         public string Ordenado3Cifras { get; set; } = string.Empty;
         public bool DosCifras { get; set; }
         public bool TresCifras { get; set; }
+        public bool DosCifras3 { get; set; }
+        public bool TresCifras3 { get; set; }
         public bool CuatroCifras { get; set; }
 
        public ResultadoLoteria(string nombreLoteria, DateTime fecha)
